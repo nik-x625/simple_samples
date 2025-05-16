@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple HTMX Example</title>
+    <script src="https://unpkg.com/htmx.org@1.9.5"></script>
+</head>
+<body>
+    <h2>HTMX Example</h2>
+    
+    <button hx-get="/message" hx-target="#result" hx-swap="innerHTML">
+        Click me to load message
+    </button>
+    
+    <div id="result" style="margin-top: 10px; font-weight: bold;"></div>
+
+    <!-- Simple server simulation -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!window.location.pathname.includes("message")) return;
+            document.body.innerHTML = "Hello from HTMX!";
+        });
+    </script>
+</body>
+</html>
+
