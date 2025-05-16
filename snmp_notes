@@ -1,0 +1,51 @@
+*** SNMP
+
+snmpget -t2 -r1 -Ln  -v2c -c Fe2x043480Mhg3y 10.22.60.116 .1.3.6.1.4.1.4413.2.2.2.1.7.1.1.0
+
+
+# some links
+https://www.digitalocean.com/community/tutorials/an-introduction-to-snmp-simple-network-management-protocol
+https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-an-snmp-daemon-and-client-on-ubuntu-14-04
+https://www.digitalocean.com/community/tutorials/how-to-use-the-net-snmp-tool-suite-to-manage-and-monitor-servers
+https://wiki.axiros.com/display/AXSDOC36/Configure+SNMP
+http://www.alvestrand.no/objectid/1.3.6.1.2.1.html
+https://www.unix.com/man-page/centos/1/snmpcmd/
+
+
+# ideas to search
+alternatives to snmp
+snmp authenticatin to request on clients, seems it is from v3, check more info on it
+how to check the snmp protocol version between agent and manager?
+authentication type (MD5 or SHA)
+privacy protocol (DES or AES) 
+
+
+# some notes
+snmp is in application layer
+
+Almost all of the commands defined in the SNMP protocol (we will go over these in detail later) are designed to be sent by a manager component. These include GetRequest, GetNextRequest, GetBulkRequest, SetRequest, InformRequest, and Response. In addition to these, a manager is also designed to respond to Trap, and Response messages.
+
+SNMP agents respond to most of the commands defined by the protocol. These include GetRequest, GetNextRequest, GetBulkRequest, SetRequest and InformRequest. In addition, an agent is designed to send Trap messages.
+
+SNMP agents do the bulk of the work. They are responsible for gathering information about the local system and storing them in a format that can be queried.updating a database called the "management information base", or MIB.
+
+
+The agent computer configures which managers should have access to its information. It can also act as an intermediary to report information on devices it can connect to that are not configured for SNMP traffic. This provides a lot of flexibility in getting your components online and SNMP accessible.
+
+
+The following PDUs, or protocol data units, describe the exact messaging types that are allowed by the protocol:
+Get: A Get message is sent by a manager to an agent to request the value of a specific OID. This request is answered with a Response message that is sent back to the manager with the data.
+GetNext: A GetNext message allows a manager to request the next sequential object in the MIB. This is a way that you can traverse the structure of the MIB without worrying about what OIDs to query.
+Set: A Set message is sent by a manager to an agent in order to change the value held by a variable on the agent. This can be used to control configuration information or otherwise modify the state of remote hosts. This is the only write operation defined by the protocol.
+GetBulk: This manager to agent request functions as if multiple GetNext requests were made. The reply back to the manager will contain as much data as possible (within the constraints set by the request) as the packet allows.
+Response: This message, sent by an agent, is used to send any requested information back to the manager. It serves as both a transport for the data requested, as well as an acknowledgement of receipt of the request. If the requested data cannot be returned, the response contains error fields that can be set with further information. A response message must be returned for any of the above requests, as well as Inform messages.
+Trap: A trap message is generally sent by an agent to a manager. Traps are asynchronous notifications in that they are unsolicited by the manager receiving them. They are mainly used by agents to inform managers of events that are happening on their managed devices.
+Inform: To confirm the receipt of a trap, a manager sends an Inform message back to the agent. If the agent does not receive this message, it may continue to resend the trap message.
+
+
+NoAuthNoPriv: Users connecting with this level have no authentication in place and no privacy of the messages they send and receive.
+AuthNoPriv: Connections using this model must authenticate, but messages are sent without any encryption.
+AuthPriv: Authentication is required and messages are encrypted.
+
+
+Version 3 also has the ability to leverage the security provided by the transport protocols, such as SSH or TLS.

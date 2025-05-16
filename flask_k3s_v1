@@ -1,0 +1,11 @@
+based on this: https://github.com/cipz/k3s-kubernetes-flask-hello-world
+docker build -t test1 .
+docker save k3s-kubernetes-flask-hello-world | k3s ctr images import -
+k3s ctr images ls
+
+kc apply -f dep.yaml
+
+kc get all => read the loadbalancer ip
+then connect to vps using tunnel to this ip
+
+but the problem is that I can't connect to Flask app from outside. That's why I am looking for a solution
