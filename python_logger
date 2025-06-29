@@ -1,3 +1,80 @@
+### define this in logger_config.py
+import logging
+from logging.handlers import RotatingFileHandler
+import os
+
+# Ensure logs directory exists
+log_dir = "logs"
+os.makedirs(log_dir, exist_ok=True)
+log_file = os.path.join(log_dir, "app.log")
+
+# Create and configure logger
+logger = logging.getLogger("my_app")
+logger.setLevel(logging.DEBUG)  # Default level; can be overridden
+
+# Avoid duplicate handlers if already configured
+if not logger.handlers:
+
+    # Console handler
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    console_formatter = logging.Formatter("%(levelname)s - %(message)s")
+    console_handler.setFormatter(console_formatter)
+
+    # File handler with rotation
+    file_handler = RotatingFileHandler(log_file, maxBytes=5*1024*1024, backupCount=3)
+    file_handler.setLevel(logging.DEBUG)
+    file_formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+    file_handler.setFormatter(file_formatter)
+
+    # Add handlers
+    logger.addHandler(console_handler)
+    logger.addHandler(file_handler)
+
+
+
+#### then in your module import and use it as below:
+# some_module.py
+
+from logger_config import logger
+
+def do_something():
+    logger.info("Doing something important")
+
+
+
+
+### 🔁 Optional: Dynamically Control Log Level via Environment
+import os
+log_level = os.getenv("LOG_LEVEL", "INFO").upper()
+logger.setLevel(getattr(logging, log_level, logging.INFO))
+
+### and can run it with:
+LOG_LEVEL=DEBUG python your_script.py
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### my old notes about logging
 
 ### python logger
 import logging
@@ -47,57 +124,3 @@ in the main file do:
 logger = get_module_logger(__name__)
 logger.DEBUG(“some debug logging here”)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import logging
-from logging.handlers import RotatingFileHandler
-import os
-
-# Create logs directory if not exists
-log_dir = "logs"
-os.makedirs(log_dir, exist_ok=True)
-log_file = os.path.join(log_dir, "app.log")
-
-# Logger configuration
-logger = logging.getLogger("my_app")
-logger.setLevel(logging.DEBUG)  # You can change this in production
-
-# Console Handler
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.INFO)
-console_formatter = logging.Formatter("%(levelname)s - %(message)s")
-console_handler.setFormatter(console_formatter)
-
-# File Handler with rotation
-file_handler = RotatingFileHandler(log_file, maxBytes=5*1024*1024, backupCount=3)
-file_handler.setLevel(logging.DEBUG)
-file_formatter = logging.Formatter(
-    "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
-file_handler.setFormatter(file_formatter)
-
-# Add handlers to logger
-logger.addHandler(console_handler)
-logger.addHandler(file_handler)
-
-
-usage:
-logger.debug("Debug message")
-logger.info("Info message")
-logger.warning("Warning")
-logger.error("Error")
-logger.critical("Critical error")
