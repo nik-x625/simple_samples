@@ -43,6 +43,12 @@ from logger_config import logger
 def do_something():
     logger.info("Doing something important")
 
+logger.debug("Debug message")
+logger.info("Info message")
+logger.warning("Warning")
+logger.error("Error")
+logger.critical("Critical error")
+
 
 
 
